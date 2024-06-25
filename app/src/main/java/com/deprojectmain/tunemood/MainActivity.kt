@@ -1,8 +1,10 @@
 package com.deprojectmain.tunemood
 
 import android.annotation.SuppressLint
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -12,8 +14,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountBox
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Home
@@ -34,7 +37,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -42,15 +47,15 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.deprojectmain.tunemood.data.Data
 import com.deprojectmain.tunemood.navigation.AccountScreenClass
+import com.deprojectmain.tunemood.navigation.AlbumScreenClass
 import com.deprojectmain.tunemood.navigation.BrowseScreenClass
-import com.deprojectmain.tunemood.navigation.HomeScreenClass
 import com.deprojectmain.tunemood.navigation.LibraryScreenClass
 import com.deprojectmain.tunemood.navigation.MainScreenClass
 import com.deprojectmain.tunemood.navigation.SettingsScreenClass
 import com.deprojectmain.tunemood.navigation.TrackPlayerScreenClass
 import com.deprojectmain.tunemood.screens.AccountScreen
+import com.deprojectmain.tunemood.screens.AlbumScreen
 import com.deprojectmain.tunemood.screens.BrowseScreen
-import com.deprojectmain.tunemood.screens.HomeScreen
 import com.deprojectmain.tunemood.screens.LibraryScreen
 import com.deprojectmain.tunemood.screens.MainScreen
 import com.deprojectmain.tunemood.screens.SettingsScreen
@@ -68,8 +73,27 @@ class MainActivity : ComponentActivity() {
         setContent {
             TuneMoodTheme {
                 Surface(
-                    modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.surface
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.surface
                 ) { // A surface container using the 'background' color from the theme
+                    val context = LocalContext.current
+                    val isConnectedToInternet = remember {
+                        mutableStateOf(
+                            ContextCompat.checkSelfPermission(
+                                context,
+                                android.Manifest.permission.INTERNET
+                            ) == PackageManager.PERMISSION_GRANTED
+                        )
+                    }
+                    if (isConnectedToInternet.value) {
+                        Log.d("Start", "onCreate: You have internet access")
+                    } else {
+                        Toast.makeText(
+                            context,
+                            "onCreate: You do not have internet access! \n App Can't Work Without Internet!",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                     val viewModel: MainViewModel by viewModels()
                     var dataList = mutableListOf<Data>()
                     lifecycleScope.launch {
@@ -87,22 +111,28 @@ class MainActivity : ComponentActivity() {
                     Scaffold(modifier = Modifier
                         .fillMaxSize(),
                         topBar = {
-                            TopAppBar(title = {
-                                Text(text = startScreen.value)
-                            }, navigationIcon = {
-                                IconButton(onClick = { navController.navigateUp() }) {
-                                    Icon(
-                                        imageVector = Icons.Default.AccountBox,
-                                        contentDescription = "Back"
-                                    )
-                                }
-                            }, colors = TopAppBarColors(
-                                containerColor = Color(0xFF68B7E8),
-                                actionIconContentColor = Color.Black,
-                                scrolledContainerColor = Color.Black,
-                                navigationIconContentColor = Color.White,
-                                titleContentColor = Color.White
-                            )
+                            TopAppBar(
+                                title = {
+                                    Text(text = startScreen.value)
+                                },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(2.dp)
+                                    .wrapContentHeight(),
+                                navigationIcon = {
+                                    IconButton(onClick = { navController.navigateUp() }) {
+                                        Icon(
+                                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                            contentDescription = "Back"
+                                        )
+                                    }
+                                }, colors = TopAppBarColors(
+                                    containerColor = Color(0xFF68B7E8),
+                                    actionIconContentColor = Color.Black,
+                                    scrolledContainerColor = Color.Black,
+                                    navigationIconContentColor = Color.White,
+                                    titleContentColor = Color.White
+                                )
                             )
                         },
                         bottomBar = {
@@ -114,10 +144,18 @@ class MainActivity : ComponentActivity() {
                                 tonalElevation = 4.dp
                             ) {
                                 IconButton(
-                                    onClick = { navController.navigate(HomeScreenClass) },
-                                    modifier = Modifier.weight(1f)
+                                    onClick = { navController.navigate(MainScreenClass) },
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .wrapContentHeight()
+                                        .padding(2.dp)
                                 ) {
-                                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                    Column(
+                                        horizontalAlignment = Alignment.CenterHorizontally,
+                                        modifier = Modifier
+                                            .wrapContentSize()
+                                            .padding(2.dp)
+                                    ) {
                                         Icon(
                                             imageVector = Icons.Default.Home,
                                             contentDescription = "Home",
@@ -132,9 +170,17 @@ class MainActivity : ComponentActivity() {
                                 }
                                 IconButton(
                                     onClick = { navController.navigate(LibraryScreenClass) },
-                                    modifier = Modifier.weight(1f)
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .wrapContentHeight()
+                                        .padding(2.dp)
                                 ) {
-                                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                    Column(
+                                        horizontalAlignment = Alignment.CenterHorizontally,
+                                        modifier = Modifier
+                                            .wrapContentSize()
+                                            .padding(2.dp)
+                                    ) {
                                         Icon(
                                             imageVector = Icons.Default.Add,
                                             contentDescription = "Library",
@@ -149,9 +195,17 @@ class MainActivity : ComponentActivity() {
                                 }
                                 IconButton(
                                     onClick = { navController.navigate(BrowseScreenClass) },
-                                    modifier = Modifier.weight(1f)
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .wrapContentHeight()
+                                        .padding(2.dp)
                                 ) {
-                                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                    Column(
+                                        horizontalAlignment = Alignment.CenterHorizontally,
+                                        modifier = Modifier
+                                            .wrapContentSize()
+                                            .padding(2.dp)
+                                    ) {
                                         Icon(
                                             imageVector = Icons.Default.Search,
                                             contentDescription = "Browse",
@@ -166,9 +220,17 @@ class MainActivity : ComponentActivity() {
                                 }
                                 IconButton(
                                     onClick = { navController.navigate(AccountScreenClass) },
-                                    modifier = Modifier.weight(1f)
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .wrapContentHeight()
+                                        .padding(2.dp)
                                 ) {
-                                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                    Column(
+                                        horizontalAlignment = Alignment.CenterHorizontally,
+                                        modifier = Modifier
+                                            .wrapContentSize()
+                                            .padding(2.dp)
+                                    ) {
                                         Icon(
                                             imageVector = Icons.Default.AccountCircle,
                                             contentDescription = "Account",
@@ -183,9 +245,17 @@ class MainActivity : ComponentActivity() {
                                 }
                                 IconButton(
                                     onClick = { navController.navigate(SettingsScreenClass) },
-                                    modifier = Modifier.weight(1f)
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .wrapContentHeight()
+                                        .padding(2.dp)
                                 ) {
-                                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                    Column(
+                                        horizontalAlignment = Alignment.CenterHorizontally,
+                                        modifier = Modifier
+                                            .wrapContentSize()
+                                            .padding(2.dp)
+                                    ) {
                                         Icon(
                                             imageVector = Icons.Default.Settings,
                                             contentDescription = "Settings",
@@ -205,10 +275,6 @@ class MainActivity : ComponentActivity() {
                             startDestination = MainScreenClass,
                             modifier = Modifier.padding((it))
                         ) {
-                            composable<HomeScreenClass> {
-                                startScreen.value = "Home"
-                                HomeScreen(navController)
-                            }
                             composable<AccountScreenClass> {
                                 startScreen.value = "Account"
                                 AccountScreen(navController)
@@ -228,6 +294,15 @@ class MainActivity : ComponentActivity() {
                             composable<SettingsScreenClass> {
                                 startScreen.value = "Settings"
                                 SettingsScreen(navController)
+                            }
+                            composable<AlbumScreenClass> { item ->
+                                val args = item.toRoute<AlbumScreenClass>()
+                                val cover: String = args.cover
+                                val title: String = args.title
+                                val trackList: String = args.trackList
+                                val id: Long = args.id
+                                val artist: String = args.artist
+                                AlbumScreen(navController, cover, title, trackList, id, artist)
                             }
                             composable<TrackPlayerScreenClass> { item ->
                                 val args = item.toRoute<TrackPlayerScreenClass>()

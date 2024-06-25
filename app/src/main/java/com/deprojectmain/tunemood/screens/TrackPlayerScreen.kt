@@ -3,29 +3,9 @@ package com.deprojectmain.tunemood.screens
 import android.media.MediaPlayer
 import android.util.Log
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Slider
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -94,11 +74,16 @@ fun TrackPlayerScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text(text = trackTitle, style = MaterialTheme.typography.headlineSmall)
+        Text(
+            text = trackTitle,
+            style = MaterialTheme.typography.headlineSmall,
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
         Text(
             text = trackArtistName,
             style = MaterialTheme.typography.bodyMedium,
-            color = Color.Gray
+            color = Color.Gray,
+            modifier = Modifier.padding(bottom = 16.dp)
         )
         Image(
             painter = rememberAsyncImagePainter(trackAlbumCover),
@@ -114,7 +99,11 @@ fun TrackPlayerScreen(
                 sliderPosition = newValue
                 mediaPlayer.seekTo((sliderPosition * trackDuration).toInt())
             },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            colors = SliderDefaults.colors(
+                thumbColor = MaterialTheme.colorScheme.primary,
+                activeTrackColor = MaterialTheme.colorScheme.primary
+            )
         )
         Spacer(modifier = Modifier.height(16.dp))
         Row(
@@ -122,16 +111,14 @@ fun TrackPlayerScreen(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Button(onClick = {
-//                TODO: Implement previous track
-            }) {
-                Image(
+            IconButton(onClick = onPreviousClick) {
+                Icon(
                     painter = painterResource(R.drawable.baseline_skip_previous_24),
                     contentDescription = "Previous"
                 )
             }
-            Spacer(modifier = Modifier.width(16.dp))
-            Button(onClick = {
+            Spacer(modifier = Modifier.width(32.dp))
+            IconButton(onClick = {
                 if (isPlaying) {
                     mediaPlayer.pause()
                     playPauseIcon.intValue = R.drawable.baseline_play_arrow_24
@@ -141,16 +128,15 @@ fun TrackPlayerScreen(
                 }
                 isPlaying = !isPlaying
             }) {
-                Image(
+                Icon(
                     painter = painterResource(playPauseIcon.intValue),
-                    contentDescription = "Play/Pause"
+                    contentDescription = "Play/Pause",
+                    modifier = Modifier.size(48.dp)
                 )
             }
-            Spacer(modifier = Modifier.width(16.dp))
-            Button(onClick = {
-//                TODO: Implement next track button
-            }) {
-                Image(
+            Spacer(modifier = Modifier.width(32.dp))
+            IconButton(onClick = onForwardClick) {
+                Icon(
                     painter = painterResource(R.drawable.baseline_skip_next_24),
                     contentDescription = "Next"
                 )

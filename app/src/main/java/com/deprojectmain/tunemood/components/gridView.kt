@@ -31,13 +31,15 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.deprojectmain.tunemood.data.Album
 import com.deprojectmain.tunemood.data.Artist
 import com.deprojectmain.tunemood.data.Data
+import com.deprojectmain.tunemood.navigation.AlbumScreenClass
 
 @Composable
-fun AlbumGridView(albums: List<Album>) {
+fun AlbumGridView(navController: NavController,albums: List<Album>) {
     LazyHorizontalGrid(
         rows = GridCells.Fixed(3),
         contentPadding = PaddingValues(8.dp),
@@ -50,7 +52,7 @@ fun AlbumGridView(albums: List<Album>) {
                 modifier = Modifier
                     .width(250.dp)
                     .padding(6.dp)
-                    .clickable { /* Handle card click */ },
+                    .clickable { navController.navigate(AlbumScreenClass) },
                 shape = RoundedCornerShape(12.dp),
                 elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
             ) {

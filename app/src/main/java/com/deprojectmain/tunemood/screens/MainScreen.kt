@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.deprojectmain.tunemood.components.AlbumGridView
 import com.deprojectmain.tunemood.components.ArtistGridView
+import com.deprojectmain.tunemood.components.SectionHeader
 import com.deprojectmain.tunemood.components.TrackGridView
 import com.deprojectmain.tunemood.data.Album
 import com.deprojectmain.tunemood.data.Artist
@@ -42,31 +43,15 @@ fun MainScreen(navController: NavController, dataList: List<Data>) {
                 .verticalScroll(scrollState)
         ) {
 //                Albums
-            Text(
-                text = "Albums",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Medium,
-                modifier = Modifier.padding(5.dp)
-            )
-            AlbumGridView(albums = albums)
+            SectionHeader(title = "Albums")
+            AlbumGridView(navController = navController,albums = albums)
 
 //                Artists
-            Text(
-                text = "Artists",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Medium,
-                modifier = Modifier.padding(5.dp)
-
-            )
+            SectionHeader(title = "Artists")
             ArtistGridView(albums = artists)
 
 //                Songs
-            Text(
-                text = "Songs",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Medium,
-                modifier = Modifier.padding(5.dp)
-            )
+            SectionHeader(title = "Songs")
             TrackGridView(albums = dataList)
         }
     }
