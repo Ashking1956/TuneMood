@@ -7,10 +7,14 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
@@ -21,6 +25,7 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -30,6 +35,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarColors
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
@@ -38,6 +44,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.navigation.compose.NavHost
@@ -115,230 +123,249 @@ class MainActivity : ComponentActivity() {
                     LaunchedEffect(key1 = model) {
                         model.fetchData()
                     }
-
                     val dataList = model.data.collectAsState()
                     val navController = rememberNavController()
                     val startScreen = remember {
                         mutableStateOf("TuneMood")
                     }
-                    Scaffold(modifier = Modifier
-                        .fillMaxSize(),
-                        topBar = {
-                            TopAppBar(
-                                title = {
-                                    Text(text = startScreen.value)
-                                },
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(2.dp)
-                                    .wrapContentHeight(),
-                                navigationIcon = {
-                                    IconButton(onClick = { navController.navigateUp() }) {
-                                        Icon(
-                                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                            contentDescription = "Back"
-                                        )
-                                    }
-                                }, colors = TopAppBarColors(
-                                    containerColor = Color(0xFF68B7E8),
-                                    actionIconContentColor = Color.Black,
-                                    scrolledContainerColor = Color.Black,
-                                    navigationIconContentColor = Color.White,
-                                    titleContentColor = Color.White
-                                )
-                            )
-                        },
-                        bottomBar = {
-                            BottomAppBar(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .wrapContentHeight(),
-                                containerColor = Color(0xFF68B7E8),
-                                tonalElevation = 4.dp
-                            ) {
-                                IconButton(
-                                    onClick = { navController.navigate(MainScreenClass) },
-                                    modifier = Modifier
-                                        .weight(1f)
-                                        .wrapContentHeight()
-                                        .padding(2.dp)
-                                ) {
-                                    Column(
-                                        horizontalAlignment = Alignment.CenterHorizontally,
-                                        modifier = Modifier
-                                            .wrapContentSize()
-                                            .padding(2.dp)
-                                    ) {
-                                        Icon(
-                                            imageVector = Icons.Default.Home,
-                                            contentDescription = "Home",
-                                            tint = Color.White
-                                        )
-                                        Text(
-                                            text = "Home",
-                                            color = Color.White,
-                                            style = MaterialTheme.typography.labelSmall
-                                        )
-                                    }
-                                }
-                                IconButton(
-                                    onClick = { navController.navigate(LibraryScreenClass) },
-                                    modifier = Modifier
-                                        .weight(1f)
-                                        .wrapContentHeight()
-                                        .padding(2.dp)
-                                ) {
-                                    Column(
-                                        horizontalAlignment = Alignment.CenterHorizontally,
-                                        modifier = Modifier
-                                            .wrapContentSize()
-                                            .padding(2.dp)
-                                    ) {
-                                        Icon(
-                                            imageVector = Icons.Default.Add,
-                                            contentDescription = "Library",
-                                            tint = Color.White
-                                        )
-                                        Text(
-                                            text = "Library",
-                                            color = Color.White,
-                                            style = MaterialTheme.typography.labelSmall
-                                        )
-                                    }
-                                }
-                                IconButton(
-                                    onClick = { navController.navigate(BrowseScreenClass) },
-                                    modifier = Modifier
-                                        .weight(1f)
-                                        .wrapContentHeight()
-                                        .padding(2.dp)
-                                ) {
-                                    Column(
-                                        horizontalAlignment = Alignment.CenterHorizontally,
-                                        modifier = Modifier
-                                            .wrapContentSize()
-                                            .padding(2.dp)
-                                    ) {
-                                        Icon(
-                                            imageVector = Icons.Default.Search,
-                                            contentDescription = "Browse",
-                                            tint = Color.White
-                                        )
-                                        Text(
-                                            text = "Browse",
-                                            color = Color.White,
-                                            style = MaterialTheme.typography.labelSmall
-                                        )
-                                    }
-                                }
-                                IconButton(
-                                    onClick = { navController.navigate(AccountScreenClass) },
-                                    modifier = Modifier
-                                        .weight(1f)
-                                        .wrapContentHeight()
-                                        .padding(2.dp)
-                                ) {
-                                    Column(
-                                        horizontalAlignment = Alignment.CenterHorizontally,
-                                        modifier = Modifier
-                                            .wrapContentSize()
-                                            .padding(2.dp)
-                                    ) {
-                                        Icon(
-                                            imageVector = Icons.Default.AccountCircle,
-                                            contentDescription = "Account",
-                                            tint = Color.White
-                                        )
-                                        Text(
-                                            text = "Account",
-                                            color = Color.White,
-                                            style = MaterialTheme.typography.labelSmall
-                                        )
-                                    }
-                                }
-                                IconButton(
-                                    onClick = { navController.navigate(SettingsScreenClass) },
-                                    modifier = Modifier
-                                        .weight(1f)
-                                        .wrapContentHeight()
-                                        .padding(2.dp)
-                                ) {
-                                    Column(
-                                        horizontalAlignment = Alignment.CenterHorizontally,
-                                        modifier = Modifier
-                                            .wrapContentSize()
-                                            .padding(2.dp)
-                                    ) {
-                                        Icon(
-                                            imageVector = Icons.Default.Settings,
-                                            contentDescription = "Settings",
-                                            tint = Color.White
-                                        )
-                                        Text(
-                                            text = "Settings",
-                                            color = Color.White,
-                                            style = MaterialTheme.typography.labelSmall
-                                        )
-                                    }
-                                }
-                            }
-                        }) {
-                        NavHost(
-                            navController = navController,
-                            startDestination = MainScreenClass,
-                            modifier = Modifier.padding((it))
+                    if (model.isLoading.collectAsState().value) {
+                        Column(
+                            modifier = Modifier.wrapContentSize(),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            composable<AccountScreenClass> {
-                                startScreen.value = "Account"
-                                AccountScreen(navController)
-                            }
-                            composable<MainScreenClass> {
-                                startScreen.value = "TuneMood"
-                                MainScreen(navController, dataList.value)
-                            }
-                            composable<BrowseScreenClass> {
-                                startScreen.value = "Browse"
-                                BrowseScreen(navController)
-                            }
-                            composable<LibraryScreenClass> {
-                                startScreen.value = "Library"
-                                LibraryScreen(navController, model)
-                            }
-                            composable<SettingsScreenClass> {
-                                startScreen.value = "Settings"
-                                SettingsScreen(navController)
-                            }
-                            composable<AlbumScreenClass> { item ->
-                                val args = item.toRoute<AlbumScreenClass>()
-                                val albumsId = args.id
-                                val albumsTitle: String = args.title
-                                val albumTrackList: String = args.trackList
-                                val albumArtist: String = args.artist
-                                val albumCover: String = args.cover
-                                AlbumScreen(
-                                    navController = navController,
-                                    id = albumsId,
-                                    title = albumsTitle,
-                                    trackList = albumTrackList,
-                                    artist = albumArtist,
-                                    cover = albumCover,
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(24.dp),
+                                color = Color(0xFF68B7E8) // Adjust color as needed
+                            )
+                            Spacer(modifier = Modifier.height(16.dp))
+                            Text(
+                                text = "Loading...", // Optional loading message
+                                style = MaterialTheme.typography.titleSmall,
+                                color = Color.Gray,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    } else {
+                        Scaffold(modifier = Modifier
+                            .fillMaxSize(),
+                            topBar = {
+                                TopAppBar(
+                                    title = {
+                                        Text(text = startScreen.value)
+                                    },
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(2.dp)
+                                        .wrapContentHeight(),
+                                    navigationIcon = {
+                                        IconButton(onClick = { navController.navigateUp() }) {
+                                            Icon(
+                                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                                contentDescription = "Back"
+                                            )
+                                        }
+                                    }, colors = TopAppBarColors(
+                                        containerColor = Color(0xFF68B7E8),
+                                        actionIconContentColor = Color.Black,
+                                        scrolledContainerColor = Color.Black,
+                                        navigationIconContentColor = Color.White,
+                                        titleContentColor = Color.White
+                                    )
                                 )
-                            }
-                            composable<TrackPlayerScreenClass> { item ->
-                                val args = item.toRoute<TrackPlayerScreenClass>()
-                                val id = args.id
-                                val trackArtistName = args.trackArtistName
-                                val trackAlbumCover = args.trackAlbumCover
-                                val trackLink = args.trackLink
-                                val trackTitle = args.trackTitle
-                                startScreen.value = "TuneMood"
-                                TrackPlayerScreen(id,
-                                    trackArtistName,
-                                    trackAlbumCover,
-                                    trackLink,
-                                    trackTitle,
-                                    {},
-                                    {})
+                            },
+                            bottomBar = {
+                                BottomAppBar(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .wrapContentHeight(),
+                                    containerColor = Color(0xFF68B7E8),
+                                    tonalElevation = 4.dp
+                                ) {
+                                    IconButton(
+                                        onClick = { navController.navigate(MainScreenClass) },
+                                        modifier = Modifier
+                                            .weight(1f)
+                                            .wrapContentHeight()
+                                            .padding(2.dp)
+                                    ) {
+                                        Column(
+                                            horizontalAlignment = Alignment.CenterHorizontally,
+                                            modifier = Modifier
+                                                .wrapContentSize()
+                                                .padding(2.dp)
+                                        ) {
+                                            Icon(
+                                                imageVector = Icons.Default.Home,
+                                                contentDescription = "Home",
+                                                tint = Color.White
+                                            )
+                                            Text(
+                                                text = "Home",
+                                                color = Color.White,
+                                                style = MaterialTheme.typography.labelSmall
+                                            )
+                                        }
+                                    }
+                                    IconButton(
+                                        onClick = { navController.navigate(LibraryScreenClass) },
+                                        modifier = Modifier
+                                            .weight(1f)
+                                            .wrapContentHeight()
+                                            .padding(2.dp)
+                                    ) {
+                                        Column(
+                                            horizontalAlignment = Alignment.CenterHorizontally,
+                                            modifier = Modifier
+                                                .wrapContentSize()
+                                                .padding(2.dp)
+                                        ) {
+                                            Icon(
+                                                imageVector = Icons.Default.Add,
+                                                contentDescription = "Library",
+                                                tint = Color.White
+                                            )
+                                            Text(
+                                                text = "Library",
+                                                color = Color.White,
+                                                style = MaterialTheme.typography.labelSmall
+                                            )
+                                        }
+                                    }
+                                    IconButton(
+                                        onClick = { navController.navigate(BrowseScreenClass) },
+                                        modifier = Modifier
+                                            .weight(1f)
+                                            .wrapContentHeight()
+                                            .padding(2.dp)
+                                    ) {
+                                        Column(
+                                            horizontalAlignment = Alignment.CenterHorizontally,
+                                            modifier = Modifier
+                                                .wrapContentSize()
+                                                .padding(2.dp)
+                                        ) {
+                                            Icon(
+                                                imageVector = Icons.Default.Search,
+                                                contentDescription = "Browse",
+                                                tint = Color.White
+                                            )
+                                            Text(
+                                                text = "Browse",
+                                                color = Color.White,
+                                                style = MaterialTheme.typography.labelSmall
+                                            )
+                                        }
+                                    }
+                                    IconButton(
+                                        onClick = { navController.navigate(AccountScreenClass) },
+                                        modifier = Modifier
+                                            .weight(1f)
+                                            .wrapContentHeight()
+                                            .padding(2.dp)
+                                    ) {
+                                        Column(
+                                            horizontalAlignment = Alignment.CenterHorizontally,
+                                            modifier = Modifier
+                                                .wrapContentSize()
+                                                .padding(2.dp)
+                                        ) {
+                                            Icon(
+                                                imageVector = Icons.Default.AccountCircle,
+                                                contentDescription = "Account",
+                                                tint = Color.White
+                                            )
+                                            Text(
+                                                text = "Account",
+                                                color = Color.White,
+                                                style = MaterialTheme.typography.labelSmall
+                                            )
+                                        }
+                                    }
+                                    IconButton(
+                                        onClick = { navController.navigate(SettingsScreenClass) },
+                                        modifier = Modifier
+                                            .weight(1f)
+                                            .wrapContentHeight()
+                                            .padding(2.dp)
+                                    ) {
+                                        Column(
+                                            horizontalAlignment = Alignment.CenterHorizontally,
+                                            modifier = Modifier
+                                                .wrapContentSize()
+                                                .padding(2.dp)
+                                        ) {
+                                            Icon(
+                                                imageVector = Icons.Default.Settings,
+                                                contentDescription = "Settings",
+                                                tint = Color.White
+                                            )
+                                            Text(
+                                                text = "Settings",
+                                                color = Color.White,
+                                                style = MaterialTheme.typography.labelSmall
+                                            )
+                                        }
+                                    }
+                                }
+                            }) {
+                            NavHost(
+                                navController = navController,
+                                startDestination = MainScreenClass,
+                                modifier = Modifier.padding((it))
+                            ) {
+                                composable<AccountScreenClass> {
+                                    startScreen.value = "Account"
+                                    AccountScreen(navController)
+                                }
+                                composable<MainScreenClass> {
+                                    startScreen.value = "TuneMood"
+                                    MainScreen(navController, dataList.value)
+                                }
+                                composable<BrowseScreenClass> {
+                                    startScreen.value = "Browse"
+                                    BrowseScreen(navController)
+                                }
+                                composable<LibraryScreenClass> {
+                                    startScreen.value = "Library"
+                                    LibraryScreen(navController, model)
+                                }
+                                composable<SettingsScreenClass> {
+                                    startScreen.value = "Settings"
+                                    SettingsScreen(navController)
+                                }
+                                composable<AlbumScreenClass> { item ->
+                                    val args = item.toRoute<AlbumScreenClass>()
+                                    val albumsId = args.id
+                                    val albumsTitle: String = args.title
+                                    val albumTrackList: String = args.trackList
+                                    val albumArtist: String = args.artist
+                                    val albumCover: String = args.cover
+                                    AlbumScreen(
+                                        navController = navController,
+                                        id = albumsId,
+                                        title = albumsTitle,
+                                        trackList = albumTrackList,
+                                        artist = albumArtist,
+                                        cover = albumCover,
+                                    )
+                                }
+                                composable<TrackPlayerScreenClass> { item ->
+                                    val args = item.toRoute<TrackPlayerScreenClass>()
+                                    val id = args.id
+                                    val trackArtistName = args.trackArtistName
+                                    val trackAlbumCover = args.trackAlbumCover
+                                    val trackLink = args.trackLink
+                                    val trackTitle = args.trackTitle
+                                    startScreen.value = "TuneMood"
+                                    TrackPlayerScreen(id,
+                                        trackArtistName,
+                                        trackAlbumCover,
+                                        trackLink,
+                                        trackTitle,
+                                        {},
+                                        {})
+                                }
                             }
                         }
                     }

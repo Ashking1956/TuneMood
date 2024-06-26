@@ -20,6 +20,10 @@ class MainViewModel(private val repository: APIRepository) : ViewModel() {
     private val _artists = MutableStateFlow<List<Artist>?>(null)
     val artists: StateFlow<List<Artist>?> get() = _artists
 
+    private val _isLoading = MutableStateFlow(true)
+    val isLoading: StateFlow<Boolean> get() = _isLoading
+
+
     private val artistsList = listOf(
         "Olivia Rodrigo", "Lil Nas X", "Coldplay", "Jason Aldean", "Luke Combs", "Miley Cyrus",
         "Billie Eilish", "Doja Cat", "Ed Sheeran", "Ariana Grande", "Travis Scott",
@@ -56,6 +60,7 @@ class MainViewModel(private val repository: APIRepository) : ViewModel() {
                 _albums.value = fetchedAlbums
                 _artists.value = fetchedArtists
                 Log.d("ViewModel", "fetchData: Successfully fetched data \n $fetchedData")
+                _isLoading.value = false
             } catch (e: Exception) {
                 e.printStackTrace()
                 Log.e("ViewModel", "fetchData: Unsuccessfully fetched data", e)
