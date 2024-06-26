@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -40,21 +39,20 @@ fun MainScreen(navController: NavController, dataList: List<Data>?) {
                 .fillMaxWidth()
                 .verticalScroll(scrollState)
         ) {
-//                Albums
+            // Albums
             SectionHeader(title = "Albums")
-            AlbumGridView(navController = navController, albums = albums)
+            AlbumGridView(albums = albums, navController = navController)
 
-//                Artists
+            // Artists
             SectionHeader(title = "Artists")
-            ArtistGridView(albums = artists)
+            ArtistGridView(albums = artists, onClick = {})
 
-//                Songs
+            // Songs
             SectionHeader(title = "Songs")
-            if (dataList != null) {
-                TrackGridView(albums = dataList)
-            } else {
-                Text(text = "Error in Fetching songs!")
+            dataList?.let {
+                TrackGridView(albums = it, navController = navController)
             }
         }
     }
 }
+

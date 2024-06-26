@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.deprojectmain.tunemood.components.TrackItem
-import com.deprojectmain.tunemood.data.Data
+import com.deprojectmain.tunemood.navigation.TrackListClass
 import com.deprojectmain.tunemood.navigation.TrackPlayerScreenClass
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -28,11 +28,11 @@ import com.google.gson.reflect.TypeToken
 @Composable
 fun AlbumScreen(
     navController: NavController,
-    cover: String,
+    id: Int,
     title: String,
     trackList: String,
-    id: Long,
-    artist: String
+    artist: String,
+    cover: String,
 ) {
     Column(
         modifier = Modifier
@@ -62,8 +62,8 @@ fun AlbumScreen(
             contentPadding = PaddingValues(bottom = 16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            val trackListType = object : TypeToken<temp>() {}.type
-            val a: temp = Gson().fromJson(trackList, trackListType)
+            val trackListClassType = object : TypeToken<TrackListClass>() {}.type
+            val a: TrackListClass = Gson().fromJson(trackList, trackListClassType)
 
             items(a.data) { track ->
                 TrackItem(track, onClick = {
@@ -73,8 +73,3 @@ fun AlbumScreen(
         }
     }
 }
-
-data class temp(
-    val data: List<Data>,
-    val total: Int
-)

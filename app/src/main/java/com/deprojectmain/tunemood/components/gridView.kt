@@ -37,9 +37,10 @@ import com.deprojectmain.tunemood.data.Album
 import com.deprojectmain.tunemood.data.Artist
 import com.deprojectmain.tunemood.data.Data
 import com.deprojectmain.tunemood.navigation.AlbumScreenClass
+import com.deprojectmain.tunemood.navigation.TrackPlayerScreenClass
 
 @Composable
-fun AlbumGridView(navController: NavController,albums: List<Album>) {
+fun AlbumGridView(navController: NavController, albums: List<Album>) {
     LazyHorizontalGrid(
         rows = GridCells.Fixed(3),
         contentPadding = PaddingValues(8.dp),
@@ -52,7 +53,18 @@ fun AlbumGridView(navController: NavController,albums: List<Album>) {
                 modifier = Modifier
                     .width(250.dp)
                     .padding(6.dp)
-                    .clickable { navController.navigate(AlbumScreenClass) },
+                    .clickable {
+                        navController.navigate(
+                            AlbumScreenClass(
+                                id = album.id,
+                                title = album.title,
+                                trackList = album.tracklist,
+                                artist = album.type,
+                                cover = album.cover
+                            )
+                        )
+
+                    },
                 shape = RoundedCornerShape(12.dp),
                 elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
             ) {
@@ -85,16 +97,14 @@ fun AlbumGridView(navController: NavController,albums: List<Album>) {
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                     }
-                    Icon(
-                        imageVector = Icons.Default.MoreVert,
+                    Icon(imageVector = Icons.Default.MoreVert,
                         contentDescription = "More options",
                         tint = MaterialTheme.colorScheme.primary,
                         modifier = Modifier
                             .size(24.dp)
                             .clickable {
                                 // Handle more options click
-                            }
-                    )
+                            })
                 }
             }
         }
@@ -102,7 +112,7 @@ fun AlbumGridView(navController: NavController,albums: List<Album>) {
 }
 
 @Composable
-fun ArtistGridView(albums: List<Artist>) {
+fun ArtistGridView(albums: List<Artist>, onClick: () -> Unit) {
     LazyHorizontalGrid(
         rows = GridCells.Fixed(3),
         contentPadding = PaddingValues(8.dp),
@@ -115,7 +125,7 @@ fun ArtistGridView(albums: List<Artist>) {
                 modifier = Modifier
                     .width(250.dp)
                     .padding(6.dp)
-                    .clickable { /* Handle card click */ },
+                    .clickable { onClick() },
                 shape = RoundedCornerShape(12.dp),
                 elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
             ) {
@@ -148,16 +158,14 @@ fun ArtistGridView(albums: List<Artist>) {
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                     }
-                    Icon(
-                        imageVector = Icons.Default.MoreVert,
+                    Icon(imageVector = Icons.Default.MoreVert,
                         contentDescription = "More options",
                         tint = MaterialTheme.colorScheme.primary,
                         modifier = Modifier
                             .size(24.dp)
                             .clickable {
                                 // Handle more options click
-                            }
-                    )
+                            })
                 }
             }
         }
@@ -165,20 +173,30 @@ fun ArtistGridView(albums: List<Artist>) {
 }
 
 @Composable
-fun TrackGridView(albums: List<Data>) {
+fun TrackGridView(albums: List<Data>, navController: NavController) {
     LazyHorizontalGrid(
         rows = GridCells.Fixed(3),
         contentPadding = PaddingValues(8.dp),
         modifier = Modifier
             .fillMaxWidth()
-            .height(240.dp) // Adjusted height for better spacing
+            .height(240.dp)
     ) {
         items(albums) { album ->
             Card(
                 modifier = Modifier
                     .width(250.dp)
                     .padding(6.dp)
-                    .clickable { /* Handle card click */ },
+                    .clickable {
+                        navController.navigate(
+                            TrackPlayerScreenClass(
+                                trackTitle = album.title,
+                                trackArtistName = album.artist.name,
+                                trackAlbumCover = album.album.cover,
+                                trackLink = album.preview,
+                                id = album.id
+                            )
+                        )
+                    },
                 shape = RoundedCornerShape(12.dp),
                 elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
             ) {
@@ -211,16 +229,14 @@ fun TrackGridView(albums: List<Data>) {
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                     }
-                    Icon(
-                        imageVector = Icons.Default.MoreVert,
+                    Icon(imageVector = Icons.Default.MoreVert,
                         contentDescription = "More options",
                         tint = MaterialTheme.colorScheme.primary,
                         modifier = Modifier
                             .size(24.dp)
                             .clickable {
                                 // Handle more options click
-                            }
-                    )
+                            })
                 }
             }
         }

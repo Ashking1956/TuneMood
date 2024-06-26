@@ -1,5 +1,8 @@
 package com.deprojectmain.tunemood.data
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class Data(
     val album: Album,
     val artist: Artist,

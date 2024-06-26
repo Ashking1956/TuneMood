@@ -146,13 +146,13 @@ fun BrowseScreen(
                 .verticalScroll(scrollState)
         ) {
             SectionHeader("Albums")
-            AlbumGridView(navController ,albums = viewModel._albums)
+            AlbumGridView(albums = viewModel._albums, navController = navController)
 
             SectionHeader("Artists")
-            ArtistGridView(viewModel._artist)
+            ArtistGridView(albums = viewModel._artist, onClick = {})
 
             SectionHeader("Songs")
-            TrackGridView(viewModel._track)
+            TrackGridView(albums = viewModel._track, navController = navController)
         }
     }
 }

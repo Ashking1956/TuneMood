@@ -302,7 +302,7 @@ class MainActivity : ComponentActivity() {
                             }
                             composable<LibraryScreenClass> {
                                 startScreen.value = "Library"
-                                LibraryScreen(navController)
+                                LibraryScreen(navController, model)
                             }
                             composable<SettingsScreenClass> {
                                 startScreen.value = "Settings"
@@ -310,12 +310,19 @@ class MainActivity : ComponentActivity() {
                             }
                             composable<AlbumScreenClass> { item ->
                                 val args = item.toRoute<AlbumScreenClass>()
-                                val cover: String = args.cover
-                                val title: String = args.title
-                                val trackList: String = args.trackList
-                                val id: Long = args.id
-                                val artist: String = args.artist
-                                AlbumScreen(navController, cover, title, trackList, id, artist)
+                                val albumsId = args.id
+                                val albumsTitle: String = args.title
+                                val albumTrackList: String = args.trackList
+                                val albumArtist: String = args.artist
+                                val albumCover: String = args.cover
+                                AlbumScreen(
+                                    navController = navController,
+                                    id = albumsId,
+                                    title = albumsTitle,
+                                    trackList = albumTrackList,
+                                    artist = albumArtist,
+                                    cover = albumCover,
+                                )
                             }
                             composable<TrackPlayerScreenClass> { item ->
                                 val args = item.toRoute<TrackPlayerScreenClass>()

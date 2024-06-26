@@ -1,5 +1,6 @@
 package com.deprojectmain.tunemood.navigation
 
+import com.deprojectmain.tunemood.data.Data
 import kotlinx.serialization.Serializable
 
 val ScreenList = listOf(
@@ -40,6 +41,13 @@ data class AlbumScreenClass(
     val cover : String,
     val title : String,
     val trackList : String,
-    val id : Long,
+    val id : Int,
     val artist : String,
+)
+
+
+@Serializable
+data class TrackListClass(
+    val data: List<Data>,
+    val total: Int
 )
