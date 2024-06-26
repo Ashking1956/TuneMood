@@ -17,15 +17,15 @@ class BrowseViewModel : ViewModel() {
     val _albums = albums
     val _artist = artists
     val _track = tracks
-    fun fetchSearchResults(retrofitBuilder: APIinterface, query: String) {
+    fun fetchSearchResults(retrofitBuilder: APInterface, query: String) {
         viewModelScope.launch {
             try {
                 val response = withContext(Dispatchers.IO) {
                     retrofitBuilder.getData(query).execute()
                 }
                 if (response.isSuccessful) {
-                    response.body()?.data?.let { dataList ->
-                        for (item in dataList) {
+                    response.let {
+                        it.body()?.data?.forEach { item ->
                             if (!albums.contains(item.album)) {
                                 albums.add(item.album)
                             }

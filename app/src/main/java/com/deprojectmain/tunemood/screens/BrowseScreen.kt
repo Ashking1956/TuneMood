@@ -39,7 +39,7 @@ import com.deprojectmain.tunemood.components.AlbumGridView
 import com.deprojectmain.tunemood.components.ArtistGridView
 import com.deprojectmain.tunemood.components.SectionHeader
 import com.deprojectmain.tunemood.components.TrackGridView
-import com.deprojectmain.tunemood.viewmodel.APIinterface
+import com.deprojectmain.tunemood.viewmodel.APInterface
 import com.deprojectmain.tunemood.viewmodel.BrowseViewModel
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -59,7 +59,7 @@ fun BrowseScreen(
             .baseUrl("https://deezerdevs-deezer.p.rapidapi.com/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-            .create(APIinterface::class.java)
+            .create(APInterface::class.java)
     }
 
     Scaffold(

@@ -1,6 +1,5 @@
 package com.deprojectmain.tunemood.navigation
 
-import com.deprojectmain.tunemood.data.Album
 import kotlinx.serialization.Serializable
 
 val ScreenList = listOf(

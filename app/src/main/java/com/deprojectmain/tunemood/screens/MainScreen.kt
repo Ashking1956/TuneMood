@@ -9,9 +9,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.deprojectmain.tunemood.components.AlbumGridView
 import com.deprojectmain.tunemood.components.ArtistGridView
@@ -22,13 +20,13 @@ import com.deprojectmain.tunemood.data.Artist
 import com.deprojectmain.tunemood.data.Data
 
 @Composable
-fun MainScreen(navController: NavController, dataList: List<Data>) {
+fun MainScreen(navController: NavController, dataList: List<Data>?) {
     Column(modifier = Modifier.padding(5.dp)) {
         val albums = remember { mutableListOf<Album>() }
         val artists = remember { mutableListOf<Artist>() }
         val scrollState = rememberScrollState()
 
-        dataList.forEach { item ->
+        dataList?.forEach { item ->
             if (!albums.contains(item.album)) {
                 albums.add(item.album)
             }
@@ -44,7 +42,7 @@ fun MainScreen(navController: NavController, dataList: List<Data>) {
         ) {
 //                Albums
             SectionHeader(title = "Albums")
-            AlbumGridView(navController = navController,albums = albums)
+            AlbumGridView(navController = navController, albums = albums)
 
 //                Artists
             SectionHeader(title = "Artists")
@@ -52,7 +50,11 @@ fun MainScreen(navController: NavController, dataList: List<Data>) {
 
 //                Songs
             SectionHeader(title = "Songs")
-            TrackGridView(albums = dataList)
+            if (dataList != null) {
+                TrackGridView(albums = dataList)
+            } else {
+                Text(text = "Error in Fetching songs!")
+            }
         }
     }
 }

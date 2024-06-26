@@ -3,12 +3,10 @@ package com.deprojectmain.tunemood
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -32,6 +30,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarColors
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -40,12 +40,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import com.deprojectmain.tunemood.data.Data
 import com.deprojectmain.tunemood.navigation.AccountScreenClass
 import com.deprojectmain.tunemood.navigation.AlbumScreenClass
 import com.deprojectmain.tunemood.navigation.BrowseScreenClass
@@ -61,8 +59,11 @@ import com.deprojectmain.tunemood.screens.MainScreen
 import com.deprojectmain.tunemood.screens.SettingsScreen
 import com.deprojectmain.tunemood.screens.TrackPlayerScreen
 import com.deprojectmain.tunemood.ui.theme.TuneMoodTheme
+import com.deprojectmain.tunemood.viewmodel.APIRepository
+import com.deprojectmain.tunemood.viewmodel.APInterface
 import com.deprojectmain.tunemood.viewmodel.MainViewModel
-import kotlinx.coroutines.launch
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : ComponentActivity() {
     @SuppressLint("CoroutineCreationDuringComposition")
@@ -77,6 +78,8 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.surface
                 ) { // A surface container using the 'background' color from the theme
                     val context = LocalContext.current
+
+                    // Check internet permission
                     val isConnectedToInternet = remember {
                         mutableStateOf(
                             ContextCompat.checkSelfPermission(
@@ -85,25 +88,35 @@ class MainActivity : ComponentActivity() {
                             ) == PackageManager.PERMISSION_GRANTED
                         )
                     }
-                    if (isConnectedToInternet.value) {
-                        Log.d("Start", "onCreate: You have internet access")
-                    } else {
+
+                    if (!isConnectedToInternet.value) {
                         Toast.makeText(
                             context,
-                            "onCreate: You do not have internet access! \n App Can't Work Without Internet!",
+                            "You do not have internet access! App cannot work without internet.",
                             Toast.LENGTH_SHORT
                         ).show()
                     }
-                    val viewModel: MainViewModel by viewModels()
-                    var dataList = mutableListOf<Data>()
-                    lifecycleScope.launch {
-                        try {
-                            dataList = viewModel.collectDataFromAPI().toMutableList()
-                            Log.d("Collection Of Data", "Data collected from API!")
-                        } catch (e: Exception) {
-                            Log.d("Collection Of Data", "Failed to collect data: $e")
-                        }
+
+                    // Step 1: Create Retrofit instance
+                    val retrofit = remember {
+                        Retrofit.Builder()
+                            .baseUrl("https://deezerdevs-deezer.p.rapidapi.com/")
+                            .addConverterFactory(GsonConverterFactory.create())
+                            .build()
+                            .create(APInterface::class.java)
                     }
+
+                    // ViewModel initialization
+                    val model = remember {
+                        MainViewModel(repository = APIRepository(retrofit))
+                    }
+
+                    // Fetch data using coroutine
+                    LaunchedEffect(key1 = model) {
+                        model.fetchData()
+                    }
+
+                    val dataList = model.data.collectAsState()
                     val navController = rememberNavController()
                     val startScreen = remember {
                         mutableStateOf("TuneMood")
@@ -281,7 +294,7 @@ class MainActivity : ComponentActivity() {
                             }
                             composable<MainScreenClass> {
                                 startScreen.value = "TuneMood"
-                                MainScreen(navController, dataList.toList())
+                                MainScreen(navController, dataList.value)
                             }
                             composable<BrowseScreenClass> {
                                 startScreen.value = "Browse"
