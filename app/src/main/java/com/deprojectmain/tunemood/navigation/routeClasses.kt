@@ -37,12 +37,18 @@ data class TrackPlayerScreenClass(
 )
 
 @Serializable
+data class ArtistScreenClass(
+    val id: Int,
+    val name: String,
+    val picture: String,
+)
+
+@Serializable
 data class AlbumScreenClass(
-    val cover : String,
-    val title : String,
-    val trackList : String,
-    val id : Int,
-    val artist : String,
+    val id: Int,
+    val title: String,
+    val artist: String,
+    val cover: String,
 )
 
 

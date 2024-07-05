@@ -35,7 +35,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarColors
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
@@ -45,7 +44,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.navigation.compose.NavHost
@@ -54,6 +52,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.deprojectmain.tunemood.navigation.AccountScreenClass
 import com.deprojectmain.tunemood.navigation.AlbumScreenClass
+import com.deprojectmain.tunemood.navigation.ArtistScreenClass
 import com.deprojectmain.tunemood.navigation.BrowseScreenClass
 import com.deprojectmain.tunemood.navigation.LibraryScreenClass
 import com.deprojectmain.tunemood.navigation.MainScreenClass
@@ -61,6 +60,7 @@ import com.deprojectmain.tunemood.navigation.SettingsScreenClass
 import com.deprojectmain.tunemood.navigation.TrackPlayerScreenClass
 import com.deprojectmain.tunemood.screens.AccountScreen
 import com.deprojectmain.tunemood.screens.AlbumScreen
+import com.deprojectmain.tunemood.screens.ArtistScreen
 import com.deprojectmain.tunemood.screens.BrowseScreen
 import com.deprojectmain.tunemood.screens.LibraryScreen
 import com.deprojectmain.tunemood.screens.MainScreen
@@ -338,17 +338,31 @@ class MainActivity : ComponentActivity() {
                                     val args = item.toRoute<AlbumScreenClass>()
                                     val albumsId = args.id
                                     val albumsTitle: String = args.title
-                                    val albumTrackList: String = args.trackList
+//                                    val albumTrackList:
                                     val albumArtist: String = args.artist
                                     val albumCover: String = args.cover
                                     AlbumScreen(
                                         navController = navController,
                                         id = albumsId,
                                         title = albumsTitle,
-                                        trackList = albumTrackList,
                                         artist = albumArtist,
                                         cover = albumCover,
+                                        viewModel = model,
                                     )
+                                }
+                                composable<ArtistScreenClass> { items ->
+                                    val args = items.toRoute<ArtistScreenClass>()
+                                    val artistId = args.id
+                                    val artistName = args.name
+                                    val artistPicture = args.picture
+                                    ArtistScreen(
+                                        navController = navController,
+                                        id = artistId,
+                                        title = artistName,
+                                        cover = artistPicture,
+                                        viewModel = model,
+                                    )
+
                                 }
                                 composable<TrackPlayerScreenClass> { item ->
                                     val args = item.toRoute<TrackPlayerScreenClass>()

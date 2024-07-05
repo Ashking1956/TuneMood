@@ -56,9 +56,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BrowseScreen(
-    navController: NavController
-) {
+fun TempBrowserScreen(navController: NavController) {
     var query by remember { mutableStateOf("") }
     var active by remember { mutableStateOf(false) }
     val searchHistory = remember { mutableStateListOf<String>() }
@@ -229,7 +227,7 @@ fun BrowseScreen(
 
 @Preview(showBackground = true)
 @Composable
-fun BrowseScreenPreview() {
+fun TempBrowserScreenPreview() {
     val navController = rememberNavController()
-    BrowseScreen(navController = navController)
+    TempBrowserScreen(navController)
 }

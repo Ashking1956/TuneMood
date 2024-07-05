@@ -41,11 +41,13 @@ fun MainScreen(navController: NavController, dataList: List<Data>?) {
         ) {
             // Albums
             SectionHeader(title = "Albums")
-            AlbumGridView(albums = albums, navController = navController)
+            if (dataList != null) {
+                AlbumGridView(albums = albums, navController = navController)
+            }
 
             // Artists
             SectionHeader(title = "Artists")
-            ArtistGridView(albums = artists, onClick = {})
+            ArtistGridView(albums = artists, navController = navController)
 
             // Songs
             SectionHeader(title = "Songs")

@@ -37,6 +37,7 @@ import com.deprojectmain.tunemood.data.Album
 import com.deprojectmain.tunemood.data.Artist
 import com.deprojectmain.tunemood.data.Data
 import com.deprojectmain.tunemood.navigation.AlbumScreenClass
+import com.deprojectmain.tunemood.navigation.ArtistScreenClass
 import com.deprojectmain.tunemood.navigation.TrackPlayerScreenClass
 
 @Composable
@@ -58,7 +59,6 @@ fun AlbumGridView(navController: NavController, albums: List<Album>) {
                             AlbumScreenClass(
                                 id = album.id,
                                 title = album.title,
-                                trackList = album.tracklist,
                                 artist = album.type,
                                 cover = album.cover
                             )
@@ -112,7 +112,7 @@ fun AlbumGridView(navController: NavController, albums: List<Album>) {
 }
 
 @Composable
-fun ArtistGridView(albums: List<Artist>, onClick: () -> Unit) {
+fun ArtistGridView(albums: List<Artist>, navController: NavController) {
     LazyHorizontalGrid(
         rows = GridCells.Fixed(3),
         contentPadding = PaddingValues(8.dp),
@@ -125,7 +125,15 @@ fun ArtistGridView(albums: List<Artist>, onClick: () -> Unit) {
                 modifier = Modifier
                     .width(250.dp)
                     .padding(6.dp)
-                    .clickable { onClick() },
+                    .clickable {
+                        navController.navigate(
+                            ArtistScreenClass(
+                                id = album.id,
+                                name = album.name,
+                                picture = album.picture
+                            )
+                        )
+                    },
                 shape = RoundedCornerShape(12.dp),
                 elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
             ) {
